@@ -53,6 +53,12 @@ func WithAdminEmailPassword(email, password string) ClientOption {
 	}
 }
 
+func WithSuperuserEmailPassword(email, password string) ClientOption {
+	return func(c *Client) {
+		c.authorizer = newAuthorizeEmailPassword(c.client, c.url+"/api/collections/_superusers/auth-with-password", email, password)
+	}
+}
+
 func WithUserEmailPassword(email, password string) ClientOption {
 	return func(c *Client) {
 		c.authorizer = newAuthorizeEmailPassword(c.client, c.url+"/api/collections/users/auth-with-password", email, password)
@@ -68,6 +74,12 @@ func WithUserEmailPasswordAndCollection(email, password, collection string) Clie
 func WithAdminToken(token string) ClientOption {
 	return func(c *Client) {
 		c.authorizer = newAuthorizeToken(c.client, c.url+"/api/admins/auth-refresh", token)
+	}
+}
+
+func WithSuperuserToken(token string) ClientOption {
+	return func(c *Client) {
+		c.authorizer = newAuthorizeToken(c.client, c.url+"/api/collections/_superusers/auth-refresh", token)
 	}
 }
 
